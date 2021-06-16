@@ -5,6 +5,7 @@ import os
 import argparse
 import sys
 from imgconv import resize, convert_to_ascii
+from file_handling import extract_img, save_img
 import regex
 
 # Parser manages the arguments and captures arguments sent into the script
@@ -17,37 +18,16 @@ parser.add_argument("-C", "--complex", help="Uses a longer ASCII sequence which 
 args = parser.parse_args()
 
 def main():
-    img = None
-
     try:
-        r = requests.head(args.input)
-        if r.ok:
-            r = requests.get(args.input)
-            img = Image.open(io.BytesIO(r.content))
-    except requests.exceptions.MissingSchema as err:
-        if os.path.isfile(args.input):
-            img = Image.open(args.input)
-        else:
-            sys.exit("Error: Unable to locate file")
-    
-    img = resize(img)
-    ascii_art = convert_to_ascii(img, args.complex, args.negative, args.color)
-    result = "\n".join([''.join(ascii_art[i:i+img.size[0]]) for i in range(0, len(ascii_art), img.size[0])])
-    print(result)
-
-    if args.output:
-        if args.output[-4:] == ".txt":
-            f = open(args.output, "w")
-            if args.color:
-                result = regex.sub(r"(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]", "", result)
-            
-            f.write(result)
-            f.close()
-        else:
-            print("Error, the specified save file is not a text file")
-    
-
-    img.close()
-
+        img = resize(extract_img(args.input))
+        ascii_art = convert_to_ascii(img, args.complex, args.negative, args.color)
+        result = "\n".join([''.join(ascii_art[i:i+img.size[0]]) for i in range(0, len(ascii_art), img.size[0])])
+        print(result)
+        if args.output:
+            save_img(args.output, result, args.color)
+        img.close()
+    except FileNotFoundError as err:
+        print(err)
+        
 if __name__ == '__main__':
     main()

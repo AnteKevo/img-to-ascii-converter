@@ -1,0 +1,39 @@
+import requests
+import os
+from PIL import Image
+import io
+import regex
+
+def is_url_img(img_url):
+   img_formats = ["image/png", "image/jpeg"]
+   r = requests.head(img_url)
+   return r.ok and r.headers["content-type"] in img_formats
+
+def is_file_img(img_path):
+   img_formats = [".png", ".jpeg", ".jpg"]
+   return os.path.isfile(img_path) and img_path.endswith(tuple(img_formats))
+
+def is_text_file(path):
+    return os.path.isfile(path) and path.endswith(".txt")
+
+def extract_img(path):
+    if is_url_img(path):
+        r = requests.get(path)
+        img = Image.open(io.BytesIO(r.content))
+    elif is_file_img(path):
+        img = Image.open(path)
+    else:
+        raise FileNotFoundError
+
+    return img
+
+def save_img(path, ascii_art, color=False):
+    if is_text_file(path):
+        f = open(path, "w")
+        if color:
+            ascii_art = regex.sub(r"(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]", "", ascii_art)
+        
+        f.write(ascii_art)
+        f.close()
+    else:
+        raise FileNotFoundError

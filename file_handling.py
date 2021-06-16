@@ -56,4 +56,5 @@ def save_img(path, ascii_art, color):
         f.close()
 
     else:
+        #TODO Create error to raise!
         raise 

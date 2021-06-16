@@ -1,5 +1,4 @@
 import argparse
-
 from requests.exceptions import HTTPError
 from imgconv import img_to_ascii
 from file_handling import extract_img, save_img
@@ -37,7 +36,7 @@ def main():
         print("Error! URL image is not accessible")
 
     except ValueError:
-        print("Error! Dimensions cannot be 0")
+        print("Error! Dimensions need to be 1 or greater")
         
 if __name__ == '__main__':
     main()

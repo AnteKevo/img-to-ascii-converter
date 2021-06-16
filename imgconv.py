@@ -62,6 +62,7 @@ def pixels_to_ascii(img, complex, negative, color):
             return list(map(lambda a_c: f"\033[38;2;{a_c.r};{a_c.g};{a_c.b}m{a_c.value}\033[0m", ascii_pixels))
             
         else:
+            #TODO Create error to raise!
             print("Error! Image does not support RGB colors")
 
     pixels = Image.Image.getdata(img.convert("LA"))

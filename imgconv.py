@@ -18,11 +18,15 @@ class LuminancePixel(object):
         self.grayscale = (255 - l) * a if negative else l * a
         self.value = ASCII_CHARS_C[int((self.grayscale / 65536) * len(ASCII_CHARS_C))] if complex else ASCII_CHARS_S[int((self.grayscale / 65536) * len(ASCII_CHARS_S))]
 
-def resize(img, flipX, flipY):
+def resize(img, flipX, flipY, dimension):
     if flipX:
         img = img.transpose(Image.FLIP_LEFT_RIGHT)
     if flipY:
         img = img.transpose(Image.FLIP_TOP_BOTTOM)
+
+    if dimension != None and dimension[0] > 1 and dimension[1] > 1:
+        dimension[0] *= 2
+        return img.resize(tuple(dimension), Image.LANCZOS)
 
     t_size = os.get_terminal_size()
     w, h = img.size
@@ -37,14 +41,15 @@ def resize(img, flipX, flipY):
     return img.resize((a_w, a_h), Image.LANCZOS)
 
 
-def img_to_ascii(img, complex, negative, color, flipX, flipY):
-    img = resize(img, flipX, flipY)
+def img_to_ascii(img, complex, negative, color, flipX, flipY, dimension):
+    img = resize(img, flipX, flipY, dimension)
     n_w = img.size[0]
     ascii_pixels = pixels_to_ascii(img, complex, negative, color)
     return "\n".join([''.join(ascii_pixels[i:i+n_w]) for i in range(0, len(ascii_pixels), n_w)])
     
 
 def pixels_to_ascii(img, complex, negative, color):
+    
     if color:
 
         if img.mode == "RGB" or img.mode == "RGBA":

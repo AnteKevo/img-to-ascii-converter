@@ -5,7 +5,7 @@ from PIL import Image
 ASCII_CHARS_S = " .:-=+*#%@"
 ASCII_CHARS_C = " .'`^\",:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
-class RGBPixel:
+class RGBPixel(object):
     def __init__(self, complex, negative, r, g, b, a=255):
         self.r = 255 - r if negative else r
         self.g = 255 - g if negative else g
@@ -13,7 +13,7 @@ class RGBPixel:
         self.grayscale = int(0.299*r + 0.587*g + 0.114*b) * a
         self.value = ASCII_CHARS_C[int((self.grayscale / 65536) * len(ASCII_CHARS_C))] if complex else ASCII_CHARS_S[int((self.grayscale / 65536) * len(ASCII_CHARS_S))]
 
-class LuminancePixel:
+class LuminancePixel(object):
     def __init__(self, complex, negative, l, a=255):
         self.grayscale = (255 - l) * a if negative else l * a
         self.value = ASCII_CHARS_C[int((self.grayscale / 65536) * len(ASCII_CHARS_C))] if complex else ASCII_CHARS_S[int((self.grayscale / 65536) * len(ASCII_CHARS_S))]

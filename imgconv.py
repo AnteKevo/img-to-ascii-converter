@@ -38,5 +38,5 @@ def convert_to_ascii(img, complex, negative, color):
             print("Error! Image is not in RGB format")
     pixels = Image.Image.getdata(img.convert("L"))
     if negative:
-        return [ASCII_CHARS_C[int((255 - pixel) // (256 / 70))] if complex else ASCII_CHARS_S[int((255- pixel) // (256 / 10))] for pixel in pixels]
+        return [ASCII_CHARS_C[int((255 - pixel) // (256 / 70))] if complex else ASCII_CHARS_S[int((255 - pixel) // (256 / 10))] for pixel in pixels]
     return [ASCII_CHARS_C[int(pixel // (256 / 70))] if complex else ASCII_CHARS_S[int(pixel // (256 / 10))] for pixel in pixels]

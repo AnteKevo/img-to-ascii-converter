@@ -5,6 +5,7 @@ import os
 import argparse
 import sys
 from imgconv import resize, convert_to_ascii
+import regex
 
 # Parser manages the arguments and captures arguments sent into the script
 parser = argparse.ArgumentParser(description="Converts images into ASCII art")
@@ -32,16 +33,18 @@ def main():
     img = resize(img)
     ascii_art = convert_to_ascii(img, args.complex, args.negative, args.color)
     result = "\n".join([''.join(ascii_art[i:i+img.size[0]]) for i in range(0, len(ascii_art), img.size[0])])
-
-    if args.output:
-        if args.output[-4:] == ".txt":
-            f = open(args.output, "w")
-            f.write(result)
-            f.close()
-        else:
-            print("Error, the specified save file is not a text file")
-
     print(result)
+
+    if args.output and args.output[-4:] == ".txt":
+        f = open(args.output, "w")
+        if args.color:
+            result = regex.sub(r"(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]", "", result)
+        
+        f.write(result)
+        f.close()
+    else:
+        print("Error, the specified save file is not a text file")
+
     img.close()
 
 if __name__ == '__main__':

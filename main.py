@@ -26,8 +26,9 @@ def main():
         if args.output:
             save_img(args.output, result, args.color)
         img.close()
-    except FileNotFoundError as err:
-        print(err)
-        
+    except FileNotFoundError as f_not_found_err:
+        print("Error! File not Found")
+    except ConnectionError as con_err:
+        print("Error! URL is not valid")
 if __name__ == '__main__':
     main()

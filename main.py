@@ -1,4 +1,6 @@
 import argparse
+
+from requests.exceptions import HTTPError
 from imgconv import img_to_ascii
 from file_handling import extract_img, save_img
 
@@ -25,14 +27,17 @@ def main():
 
         img.close()
 
-    except FileNotFoundError as f_not_found_err:
+    except FileNotFoundError:
         print("Error! File not Found")
 
-    except ConnectionError as con_err:
+    except ConnectionError:
         print("Error! URL is not valid")
 
-    except ValueError as val_err:
+    except HTTPError:
         print("Error! URL image is not accessible")
+
+    except ValueError:
+        print("Error! Dimensions cannot be 0")
         
 if __name__ == '__main__':
     main()

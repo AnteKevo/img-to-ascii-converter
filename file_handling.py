@@ -3,7 +3,7 @@ import os
 from PIL import Image
 import io
 import regex
-from requests.exceptions import MissingSchema
+from requests.exceptions import MissingSchema, HTTPError
 
 def is_url_img(img_url):
     img_formats = ["image/png", "image/jpeg"]
@@ -11,7 +11,7 @@ def is_url_img(img_url):
     try:
         r = requests.head(img_url)
         if r.status_code >= 400:
-           raise ValueError
+           raise HTTPError
 
         if not r.headers["content-type"] in img_formats:
             raise ConnectionError
@@ -21,7 +21,7 @@ def is_url_img(img_url):
     except ConnectionError as con_err:
        raise con_err
 
-    except MissingSchema as no_url_err:
+    except MissingSchema:
         return False
 
 
@@ -56,4 +56,4 @@ def save_img(path, ascii_art, color):
         f.close()
 
     else:
-        raise FileNotFoundError
+        raise 

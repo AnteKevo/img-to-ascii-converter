@@ -24,9 +24,13 @@ def resize(img, flipX, flipY, dimension):
     if flipY:
         img = img.transpose(Image.FLIP_TOP_BOTTOM)
 
-    if dimension != None and dimension[0] > 1 and dimension[1] > 1:
-        dimension[0] *= 2
-        return img.resize(tuple(dimension), Image.LANCZOS)
+    if dimension != None:
+        if dimension[0] > 1 and dimension[1] > 1:
+            dimension[0] *= 2
+            return img.resize(tuple(dimension), Image.LANCZOS)
+        else:
+            raise ValueError
+
 
     t_size = os.get_terminal_size()
     w, h = img.size
@@ -49,7 +53,7 @@ def img_to_ascii(img, complex, negative, color, flipX, flipY, dimension):
     
 
 def pixels_to_ascii(img, complex, negative, color):
-    
+
     if color:
 
         if img.mode == "RGB" or img.mode == "RGBA":

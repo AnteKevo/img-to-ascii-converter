@@ -8,8 +8,14 @@ from requests.exceptions import MissingSchema
 def is_url_img(img_url):
     img_formats = ["image/png", "image/jpeg"]
     try:
-       r = requests.head(img_url)
-       return r.ok and r.headers["content-type"] in img_formats
+        r = requests.head(img_url)
+        if r.status_code >= 400:
+           raise ValueError
+
+        if not r.headers["content-type"] in img_formats:
+            raise ConnectionError
+        
+        return True
     except ConnectionError as con_err:
        raise con_err
     except MissingSchema as no_url_err:

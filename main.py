@@ -30,5 +30,8 @@ def main():
         print("Error! File not Found")
     except ConnectionError as con_err:
         print("Error! URL is not valid")
+    except ValueError as val_err:
+        print("Error! URL image is not accessible")
+        
 if __name__ == '__main__':
     main()

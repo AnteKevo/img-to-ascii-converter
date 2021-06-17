@@ -39,7 +39,9 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## Packages Used
 
 [https://github.com/psf/requests](https://github.com/psf/requests)
+
 [https://pypi.org/project/regex/](https://pypi.org/project/regex/)
+
 [https://github.com/python-pillow/Pillow](https://github.com/python-pillow/Pillow)
 
 ## License

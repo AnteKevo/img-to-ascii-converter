@@ -19,18 +19,18 @@ class LuminancePixel(object):
         self.value = ASCII_CHARS_C[int((self.grayscale / 65536) * len(ASCII_CHARS_C))] if complex else ASCII_CHARS_S[int((self.grayscale / 65536) * len(ASCII_CHARS_S))]
 
 def resize(img, flipX, flipY, dimension):
-    if flipX:
-        img = img.transpose(Image.FLIP_LEFT_RIGHT)
-    if flipY:
-        img = img.transpose(Image.FLIP_TOP_BOTTOM)
-
     if dimension != None:
-        if dimension[0] > 1 and dimension[1] > 1:
+        if dimension[0] > 0 and dimension[1] > 0:
             dimension[0] *= 2
             return img.resize(tuple(dimension), Image.LANCZOS)
         else:
             raise ValueError
 
+    if flipX:
+        img = img.transpose(Image.FLIP_LEFT_RIGHT)
+
+    if flipY:
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
 
     t_size = os.get_terminal_size()
     w, h = img.size
@@ -55,15 +55,14 @@ def img_to_ascii(img, complex, negative, color, flipX, flipY, dimension):
 def pixels_to_ascii(img, complex, negative, color):
 
     if color:
-
+        
         if img.mode == "RGB" or img.mode == "RGBA":
             pixels = Image.Image.getdata(img)
             ascii_pixels = [RGBPixel(complex, negative, *pixel) for pixel in pixels]
             return list(map(lambda a_c: f"\033[38;2;{a_c.r};{a_c.g};{a_c.b}m{a_c.value}\033[0m", ascii_pixels))
             
         else:
-            #TODO Create error to raise!
-            print("Error! Image does not support RGB colors")
+            print("Error! Image does not support RGB colors, printing in black and white...")
 
     pixels = Image.Image.getdata(img.convert("LA"))
     ascii_pixels = [LuminancePixel(complex, negative, *pixel) for pixel in pixels]

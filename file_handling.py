@@ -5,48 +5,50 @@ import io
 import regex
 from requests.exceptions import MissingSchema, HTTPError
 
-def is_url_img(img_url):
-    img_formats = ["image/png", "image/jpeg"]
+class InvalidFileExtension(Exception):
+    pass
 
+def get_header(url):
     try:
-        r = requests.head(img_url)
+        r = requests.head(url)
         if r.status_code >= 400:
-           raise HTTPError
+            raise HTTPError
 
-        if not r.headers["content-type"] in img_formats:
-            raise ConnectionError
-        
-        return True
-
-    except ConnectionError as con_err:
-       raise con_err
+        return r.headers
 
     except MissingSchema:
+        return None
+
+
+def is_url(url, formats):
+    head = get_header(url)
+
+    if head is None:
         return False
 
+    if not head["content-type"] in formats:
+        raise ConnectionError
 
-def is_file_img(img_path):
-   img_formats = [".png", ".jpeg", ".jpg"]
-   return os.path.isfile(img_path) and img_path.endswith(tuple(img_formats))
+    return True
 
-def is_text_file(path):
-    return path.endswith(".txt")
+def is_file(path, formats):
+   return os.path.isfile(path) and path.endswith(formats)
 
-def extract_img(path):
-    if is_url_img(path):
+def extract_data(path, is_gif=False):
+    if (is_gif and is_url(path, ["image/gif"])) or is_url(path, ["image/png", "image/jpeg"]):
         r = requests.get(path)
-        img = Image.open(io.BytesIO(r.content))
-
-    elif is_file_img(path):
-        img = Image.open(path)
+        data = Image.open(io.BytesIO(r.content))
+    
+    elif (is_gif and is_file(path, (".gif", ))) or is_file(path, (".jpg", ".jpeg", ".png")):
+        data = Image.open(path)
 
     else:
         raise FileNotFoundError
 
-    return img
+    return data
 
 def save_img(path, ascii_art, color):
-    if is_text_file(path):
+    if path.endswith(".txt"):
         f = open(path, "w")
 
         if color:
@@ -56,5 +58,4 @@ def save_img(path, ascii_art, color):
         f.close()
 
     else:
-        #TODO Create error to raise!
-        raise 
+        raise InvalidFileExtension 

@@ -11,10 +11,10 @@ Image formats currently supported:
 ## Table of Content
 
 -   [Installation](#installation)
-        * [Linux (binaries)](#linux)
-	    * [Windows (binaries)](#windows)
+    * [Linux (binaries)](#linux)
+	* [Windows (binaries)](#windows)
 -   [CLI Usage](#cli-usage)
-        * [Flags](#flags)
+    * [Flags](#flags)
 <!--   [Library Usage](#library-usage) -->
 -   [Contributing](#contributing)
 -   [Packages Used](#packages-used)

@@ -14,7 +14,7 @@
 
 import argparse
 from requests.exceptions import HTTPError
-from imgconv import img_to_ascii
+from imgconv import img_to_ascii, ColorNotSupported
 from file_handling import extract_data, save_img, InvalidFileExtension
 import time
 
@@ -42,14 +42,18 @@ def main():
             frames = []
             for frame in range(gif.n_frames):
                 gif.seek(frame)
-                result = img_to_ascii(gif, args.complex, args.negative, False, args.flipX, args.flipY, None)
+                result = img_to_ascii(gif, args.complex, args.negative, args.color, args.flipX, args.flipY, None)
                 frames.append(result)
 
+            print("\033[?25l")
             for i in range(5):
                 for frame in frames:
-                    print("\033[H\033[J") # ANSI Escape Code which moves the cursor to top left of the terminal and deletes everything below
-                    print(frame)
+                    #print("\033[H\033[J") # ANSI Escape Code which moves the cursor to top left of the terminal and deletes everything below
+                    print(frame, flush=True)
                     time.sleep(1 / 15) # 15 FPS
+                    
+            print("\033[H\033[J")
+            print("\033[?25h")
             
         else:
             img = extract_data(args.input)
@@ -75,6 +79,9 @@ def main():
 
     except InvalidFileExtension:
         print("Error! Invalid file extension, use a .txt-file")
+
+    except ColorNotSupported:
+        print("Error! Image does not support RGB colors")
         
 if __name__ == '__main__':
     main()

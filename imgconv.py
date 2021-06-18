@@ -19,6 +19,9 @@ from PIL import Image
 ASCII_CHARS_S = " .:-=+*#%@"
 ASCII_CHARS_C = " .'`^\",:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
+class ColorNotSupported(Exception):
+    pass
+
 class RGBPixel(object):
     def __init__(self, complex, negative, r, g, b, a=255):
         self.r = 255 - r if negative else r
@@ -69,6 +72,8 @@ def img_to_ascii(img, complex, negative, color, flipX, flipY, dimension):
 def pixels_to_ascii(img, complex, negative, color):
 
     if color:
+        if img.mode == "P":
+            img = img.convert("RGBA")
         
         if img.mode == "RGB" or img.mode == "RGBA":
             pixels = Image.Image.getdata(img)
@@ -76,7 +81,7 @@ def pixels_to_ascii(img, complex, negative, color):
             return list(map(lambda a_c: f"\033[38;2;{a_c.r};{a_c.g};{a_c.b}m{a_c.value}\033[0m", ascii_pixels))
             
         else:
-            print("Error! Image does not support RGB colors, printing in black and white...")
+            raise ColorNotSupported
 
     pixels = Image.Image.getdata(img.convert("LA"))
     ascii_pixels = [LuminancePixel(complex, negative, *pixel) for pixel in pixels]

@@ -45,14 +45,17 @@ def main():
                 result = img_to_ascii(gif, args.complex, args.negative, args.color, args.flipX, args.flipY, None)
                 frames.append(result)
 
+            # Hides cursor
             print("\033[?25l")
+
             for i in range(5):
                 for frame in frames:
-                    #print("\033[H\033[J") # ANSI Escape Code which moves the cursor to top left of the terminal and deletes everything below
+                    print("\033[H\033[J") # ANSI Escape Code which moves the cursor to top left of the terminal and deletes everything below
                     print(frame, flush=True)
                     time.sleep(1 / 15) # 15 FPS
-                    
-            print("\033[H\033[J")
+
+
+            # Shows cursor
             print("\033[?25h")
             
         else:

@@ -45,28 +45,30 @@ def main():
                 result = img_to_ascii(gif, args.complex, args.negative, args.color, args.flipX, args.flipY, None)
                 frames.append(result)
 
-            # Hides cursor
-            print("\033[?25l")
+            # Hides cursor and clears the screen
+            print("\033[?25l\033[2J")
+            try:
+                for i in range(5):
+                    for frame in frames:
+                        print("\033[H") # Moves the hidden cursor back to the top left corner
+                        print(frame, end="\r")
+                        time.sleep(1 / 15) # 15 FPS
 
-            for i in range(5):
-                for frame in frames:
-                    print("\033[H\033[J") # ANSI Escape Code which moves the cursor to top left of the terminal and deletes everything below
-                    print(frame, flush=True)
-                    time.sleep(1 / 15) # 15 FPS
-
-
-            # Shows cursor
-            print("\033[?25h")
+            finally:
+                # Shows cursor
+                print("\033[?25h")
+                gif.close()
             
         else:
-            img = extract_data(args.input)
-            result = img_to_ascii(img, args.complex, args.negative, args.color, args.flipX, args.flipY, args.dimension)
-            print(result)
+            try:
+                img = extract_data(args.input)
+                result = img_to_ascii(img, args.complex, args.negative, args.color, args.flipX, args.flipY, args.dimension)
+                print(result)
 
-            if args.output:
-                save_img(args.output, result, args.color)
-
-            img.close()
+                if args.output:
+                    save_img(args.output, result, args.color)
+            finally:
+                img.close()
 
     except FileNotFoundError:
         print("Error! File not found or is not a .jpg/.jpeg/.png-file")

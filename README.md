@@ -144,6 +144,7 @@ Saves an ASCII Image in a .txt-file.
 img-to-ascii -o <path/to/txt-file> [path/url] 
 # Or
 img-to-ascii --output <path/to/txt-file> [path/url]
+```
 
 <!-- ## Library Usage
 

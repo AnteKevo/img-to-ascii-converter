@@ -30,11 +30,11 @@ Now, open a terminal in the same directory and execute this command:
 ```
 sudo cp img-to-ascii /usr/local/bin/
 ```
-Now you can use img-to-ascii in the terminal. Execute "img-to-ascii -h" for more details.
+Now you can use img-to-ascii in the terminal. Execute `img-to-ascii -h` for more details.
 
 ### Windows
 
-You will need to set an Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
+You will need to set an Environment Variable to the folder the aimg-to-ascii.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
 
 Download the archive for Windows [here](https://github.com/AnteKevo/img-to-ascii-converter/releases/latest), extract it, and open the extracted folder. Now, copy the folder path from the top of the file explorer and follow these instructions:
 * In Search, search for and then select: System (Control Panel)
@@ -43,7 +43,7 @@ Download the archive for Windows [here](https://github.com/AnteKevo/img-to-ascii
 * In the Edit Environment Variable window, click "New" and then paste the path of the folder that you copied initially.
 * Click "Ok" on all open windows.
 
-Now, restart any open command prompt and execute "img-to-ascii -h" for more details.
+Now, restart any open command prompt and execute `img-to-ascii -h` for more details.
 
 ## CLI Usage
 
